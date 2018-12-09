@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.cgenh.springBoot.activiti</groupId>
+        <artifactId>springBoot_Activiti_parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>springBoot_Activiti_core</artifactId>
+    <packaging>war</packaging>
+
+    <properties>
+        <start.class>org.cgenh.springBoot.activiti.HelloWorld</start.class>
+    </properties>
+
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!--jrebel热部署-->
+            <plugin>
+                <groupId>org.zeroturnaround</groupId>
+                <artifactId>jrebel-maven-plugin</artifactId>
+            </plugin>
+            <!--war包相关-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+            </plugin>
+            <!-- 集成jetty插件 -->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.4.14.v20181114</version>
+                <configuration>
+                    <httpConnector>
+                        <host>localhost</host>
+                        <port>8080</port>
+                        <path>/${project.artifactId}</path>
+                    </httpConnector>
+                    <scanIntervalSeconds>1</scanIntervalSeconds>
+                    <systemProperties>
+                        <JAVA_OPTS>-Xms1024m -Xmx1024m -XX:PermSize=512M -XX:MaxPermSize=1024M</JAVA_OPTS>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.cgenh.springBoot.activiti</groupId>
+            <artifactId>springBoot_Activiti_framework</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+
+</project>
