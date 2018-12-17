@@ -1,0 +1,41 @@
+server:
+  port: @project.server.port@
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: @project.artifactId@
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java   #重启目录
+      exclude: WEB-INF/**
+  datasource:
+    type: @projcet.jdbc.pool@                              # 当前数据源操作类型
+    driver-class-name: @project.jdbc.driver@               # mysql驱动包
+    url: @project.jdbc.url@                                # 数据库名称
+    username: @project.jdbc.username@
+    password: @project.jdbc.password@
+    dbcp2:
+      min-idle: @project.jdbc.min-idle@                    # 数据库连接池的最小维持连接数
+      initial-size: @project.jdbc.initial-size@            # 初始化连接数
+      max-total: @project.jdbc.max-total@                  # 最大连接数
+      max-wait-millis: @project.jdbc.max-wait-millis@      # 等待连接获取的最大超时时间
+  activiti:
+    check-process-definitions: false
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
+        format_sql: true
+    show-sql: true
+    open-in-view: false
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: UTC
+

@@ -23,6 +23,7 @@
         <activiti.version>6.0.0</activiti.version>
         <log4j2.version>2.9.1</log4j2.version>
         <struts.version>2.5.18</struts.version>
+        <activiti.version>6.0.0</activiti.version>
     </properties>
 
     <dependencyManagement>
@@ -36,9 +37,43 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${sprinBoot.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-tomcat</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!--热部署-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-devtools</artifactId>
+                <version>${sprinBoot.version}</version>
+                <optional>true</optional>
+            </dependency>
+            <!--activiti-->
+            <dependency>
                 <groupId>org.activiti</groupId>
                 <artifactId>activiti-spring-boot-starter-basic</artifactId>
-                <version>6.0.0</version>
+                <version>${activiti.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-spring-boot-starter-rest-api</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-spring-boot-starter-actuator</artifactId>
+                <version>${activiti.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.activiti</groupId>
+                <artifactId>activiti-spring-boot-starter-jpa</artifactId>
+                <version>${activiti.version}</version>
             </dependency>
             <dependency>
                 <groupId>mysql</groupId>
@@ -113,34 +148,23 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>2.1.1.RELEASE</version>
+                    <version>${sprinBoot.version}</version>
                     <configuration>
-                        <mainClass>${project.start.class}</mainClass>
-                        <layout>war</layout>
+                        <fork>true</fork>
+                        <!--<addResources>true</addResources>-->
                     </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>repackage</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
-
-                <!--jrebel热部署-->
                 <plugin>
-                    <groupId>org.zeroturnaround</groupId>
-                    <artifactId>jrebel-maven-plugin</artifactId>
-                    <version>1.1.8</version>
-                    <executions>
-                        <execution>
-                            <id>generate-rebel-xml</id>
-                            <phase>process-resources</phase>
-                            <goals>
-                                <goal>generate</goal>
-                            </goals>
-                        </execution>
-                    </executions>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.1.0</version>
+                    <configuration>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <delimiters>
+                            <delimit>@</delimit>
+                        </delimiters>
+                        <useDefaultDelimiters>false</useDefaultDelimiters>
+                    </configuration>
                 </plugin>
                 <!--war包相关-->
                 <plugin>
@@ -153,11 +177,10 @@
                                 <directory>src/main/webapp</directory>
                             </resource>
                         </webResources>
-                        <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+                        <!--<webXml>src/main/webapp/WEB-INF/web.xml</webXml>-->
                     </configuration>
                 </plugin>
             </plugins>
-
         </pluginManagement>
         <!--加载文件-->
         <resources>
@@ -169,10 +192,11 @@
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
+                <filtering>true</filtering>
                 <includes>
                     <include>**/*.xml</include>
+                    <include>**/*.yml</include>
                     <include>**/*.properties</include>
-                    <include>**/*.json</include>
                 </includes>
             </resource>
         </resources>
@@ -180,11 +204,5 @@
             <filter>src/main/filter/${env}.properties</filter>
         </filters>
     </build>
-
-    <dependencies>
-
-
-    </dependencies>
-
 
 </project>
